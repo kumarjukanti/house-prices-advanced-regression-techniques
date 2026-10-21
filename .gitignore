@@ -12,3 +12,6 @@ mlartifacts/
 mlflow.db
 *.sqlite
 *.sqlite3
+*.csv
+raw/
+
