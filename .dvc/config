@@ -1,0 +1,5 @@
+[core]
+    remote = s3remote
+['remote "s3remote"']
+    url = s3://house-prices-advanced-regression-techniques-kumarjukanti/dvc
+    region = us-west-1
