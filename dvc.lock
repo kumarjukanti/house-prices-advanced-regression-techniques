@@ -1,0 +1,94 @@
+schema: '2.0'
+stages:
+  build_db:
+    cmd: "uv run python src/data/build_database.py && sqlite3 house_prices.db < sql/02_features.sql\n"
+    deps:
+    - path: data/raw/test.csv
+      hash: md5
+      md5: dcec4b79bf9c7317bd9e17789bf888f0
+      size: 451405
+    - path: data/raw/train.csv
+      hash: md5
+      md5: 80ccab65fb115cbad143dbbd2bcd5577
+      size: 460676
+    - path: sql/01_schema.sql
+      hash: md5
+      md5: 7b7b01c01235ab17e465f7d5316a15e2
+      size: 2141
+    - path: sql/02_features.sql
+      hash: md5
+      md5: a7c0aacce437fd5f59dce9e19aaeade5
+      size: 1275
+    - path: src/data/build_database.py
+      hash: md5
+      md5: f59e8a2b1d82e7b194b33be1a50da016
+      size: 2147
+    outs:
+    - path: house_prices.db
+      hash: md5
+      md5: 60feecc8b483da2992915046c52361e2
+      size: 827392
+  export_model_source:
+    cmd: uv run python src/data/export_model_table.py
+    deps:
+    - path: house_prices.db
+      hash: md5
+      md5: 60feecc8b483da2992915046c52361e2
+      size: 827392
+    - path: src/data/export_model_table.py
+      hash: md5
+      md5: ec4118a6542b235efa0004ebce9a9a3e
+      size: 1746
+    outs:
+    - path: data/interim/model_source.parquet
+      hash: md5
+      md5: f591e509ad49b9ff407bc6e5edcbadc9
+      size: 158841
+  features:
+    cmd: "uv run python src/features/build_features.py --random-state 42\n"
+    deps:
+    - path: data/interim/model_source.parquet
+      hash: md5
+      md5: f591e509ad49b9ff407bc6e5edcbadc9
+      size: 158841
+    - path: src/features/build_features.py
+      hash: md5
+      md5: f4c175e7365d28b1e242821f4aef4767
+      size: 1745
+    outs:
+    - path: data/processed/test.parquet
+      hash: md5
+      md5: 3611236bc5d58cb24c1728c2a4d5e7cc
+      size: 77373
+    - path: data/processed/train.parquet
+      hash: md5
+      md5: aa2ea5d414b3cf5fada32ced37cf4c49
+      size: 120933
+    - path: data/processed/validation.parquet
+      hash: md5
+      md5: 61ec0c7829748e4f585f8a8927c94b90
+      size: 77481
+  train:
+    cmd: ".venv/bin/python src/models/compare_models.py\n"
+    deps:
+    - path: data/processed/train.parquet
+      hash: md5
+      md5: aa2ea5d414b3cf5fada32ced37cf4c49
+      size: 120933
+    - path: data/processed/validation.parquet
+      hash: md5
+      md5: 61ec0c7829748e4f585f8a8927c94b90
+      size: 77481
+    - path: src/models/compare_models.py
+      hash: md5
+      md5: 33025f208b5085af5b365399545be1e4
+      size: 6367
+    outs:
+    - path: artifacts/model_selection.json
+      hash: md5
+      md5: 08e6f48a871b6b361fd41f6c28660500
+      size: 493
+    - path: models/selected_house_price_model.joblib
+      hash: md5
+      md5: 3b807f3998eead20661dd77e0ed27525
+      size: 22368

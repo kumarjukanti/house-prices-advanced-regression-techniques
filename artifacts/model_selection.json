@@ -1,0 +1,19 @@
+{
+  "selected_model": "ridge",
+  "selection_metric": "rmse_log_price",
+  "validation_rmse_log_price": 0.13248891446139244,
+  "train_rows": 876,
+  "validation_rows": 292,
+  "models": {
+    "ridge": {
+      "rmse_log_price": 0.13248891446139244,
+      "rmse_dollars": 25814.23922098703,
+      "mae_dollars": 16270.280115825462
+    },
+    "random_forest": {
+      "rmse_log_price": 0.14723310292960728,
+      "rmse_dollars": 29197.794844300395,
+      "mae_dollars": 18347.234536530617
+    }
+  }
+}

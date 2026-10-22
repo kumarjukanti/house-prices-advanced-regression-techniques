@@ -1,0 +1,45 @@
+stages:
+  build_db:
+    cmd: >
+      uv run python src/data/build_database.py &&
+      sqlite3 house_prices.db < sql/02_features.sql
+    deps:
+      - data/raw/train.csv
+      - data/raw/test.csv
+      - src/data/build_database.py
+      - sql/01_schema.sql
+      - sql/02_features.sql
+    outs:
+      - house_prices.db
+
+  export_model_source:
+    cmd: uv run python src/data/export_model_table.py
+    deps:
+      - house_prices.db
+      - src/data/export_model_table.py
+    outs:
+      - data/interim/model_source.parquet
+
+  features:
+    cmd: >
+      uv run python src/features/build_features.py
+      --random-state 42
+    deps:
+      - data/interim/model_source.parquet
+      - src/features/build_features.py
+    outs:
+      - data/processed/train.parquet
+      - data/processed/validation.parquet
+      - data/processed/test.parquet
+
+  train:
+    cmd: >
+      .venv/bin/python src/models/compare_models.py
+    deps:
+      - src/models/compare_models.py
+      - data/processed/train.parquet
+      - data/processed/validation.parquet
+    outs:
+      - models/selected_house_price_model.joblib
+    metrics:
+      - artifacts/model_selection.json
