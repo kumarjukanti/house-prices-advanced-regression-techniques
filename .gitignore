@@ -15,4 +15,11 @@ mlflow.db
 *.csv
 raw/
 /house_prices.db
-
+/data/interim/model_source.parquet
+/data/processed/train.parquet
+/data/processed/validation.parquet
+/data/processed/test.parquet
+/models/selected_house_price_model.joblib
+/reports/actual_vs_predicted.png
+/reports/residuals.png
+/reports/test_predictions.csv

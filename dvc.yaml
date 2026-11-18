@@ -33,8 +33,7 @@ stages:
       - data/processed/test.parquet
 
   train:
-    cmd: >
-      .venv/bin/python src/models/compare_models.py
+    cmd: uv run python src/models/compare_models.py
     deps:
       - src/models/compare_models.py
       - data/processed/train.parquet
@@ -42,4 +41,19 @@ stages:
     outs:
       - models/selected_house_price_model.joblib
     metrics:
-      - artifacts/model_selection.json
+      - artifacts/model_selection.json:
+          cache: false
+
+  evaluate:
+    cmd: uv run python src/models/evaluate.py
+    deps:
+      - src/models/evaluate.py
+      - models/selected_house_price_model.joblib
+      - data/processed/test.parquet
+    metrics:
+      - reports/metrics.json:
+          cache: false
+    outs:
+      - reports/test_predictions.csv
+      - reports/actual_vs_predicted.png
+      - reports/residuals.png

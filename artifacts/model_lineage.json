@@ -2,7 +2,7 @@
   "project": "house-prices-advanced-regression-techniques",
   "task": "regression",
   "target": "SalePrice",
-  "created_at_utc": "2026-11-18T19:27:24.392350+00:00",
+  "created_at_utc": "2026-11-18T22:39:37.124942+00:00",
   "selected_model": "ridge",
   "selection_metric": "rmse_log_price",
   "validation_rmse_log_price": 0.13248891446139244,
@@ -114,12 +114,22 @@
     },
     "selection": {
       "path": "artifacts/model_selection.json",
-      "md5": "08e6f48a871b6b361fd41f6c28660500"
+      "md5": "7bfca50a7b5fbf3d31e801930abbf66b"
+    },
+    "test_metrics": {
+      "path": "reports/metrics.json",
+      "md5": "afb27a3d1d6e279dee547da06e584282"
     }
   },
   "model_sha256": "304f0de1a9eb72ad9c367bc6c68ef45147ad6937d41a39ebf58166cec83a3bea",
-  "dvc_lock_sha256": "202bdb6ae69af8c9c27825190ceb7914e819ed638fe5810aaa1dce33ebc902ac",
-  "test_metrics": null,
+  "dvc_lock_sha256": "498beb6f15862eeb99536f607f90448153e1f9e7536ae7d023fee5c80f7590b4",
+  "test_metrics": {
+    "test_rows": 292,
+    "rmse_dollars": 26368.741403443346,
+    "mae_dollars": 17009.641576514307,
+    "rmse_log_price": 0.1398522575977281,
+    "r2": 0.9093505928665513
+  },
   "mlflow": null,
   "limitations": [
     "Local files match the current DVC lock; this does not prove historical execution.",

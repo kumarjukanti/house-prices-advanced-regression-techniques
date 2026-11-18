@@ -15,7 +15,6 @@ from sklearn.metrics import (
     r2_score,
 )
 
-
 ROOT = Path(__file__).resolve().parents[2]
 
 TEST_FILE = ROOT / "data/processed/test.parquet"

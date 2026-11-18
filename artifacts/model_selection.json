@@ -11,8 +11,8 @@
       "mae_dollars": 16270.280115825462
     },
     "random_forest": {
-      "rmse_log_price": 0.14723310292960728,
-      "rmse_dollars": 29197.794844300395,
+      "rmse_log_price": 0.14723310292960717,
+      "rmse_dollars": 29197.794844300402,
       "mae_dollars": 18347.234536530617
     }
   }

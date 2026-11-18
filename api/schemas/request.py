@@ -4,7 +4,6 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-
 NonNegativeFloat = Annotated[float, Field(ge=0)]
 NonNegativeInt = Annotated[int, Field(ge=0)]
 

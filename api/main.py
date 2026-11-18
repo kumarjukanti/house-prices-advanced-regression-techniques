@@ -10,7 +10,6 @@ from fastapi import FastAPI, HTTPException
 
 from api.schemas.request import HousePriceRequest
 
-
 ROOT = Path(__file__).resolve().parents[1]
 MODEL_FILE = ROOT / "models/selected_house_price_model.joblib"
 

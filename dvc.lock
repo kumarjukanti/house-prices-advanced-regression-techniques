@@ -21,8 +21,8 @@ stages:
       size: 1275
     - path: src/data/build_database.py
       hash: md5
-      md5: f59e8a2b1d82e7b194b33be1a50da016
-      size: 2147
+      md5: 0dba7cc80966f328f30ff4c8e0166cfe
+      size: 2146
     outs:
     - path: house_prices.db
       hash: md5
@@ -37,8 +37,8 @@ stages:
       size: 827392
     - path: src/data/export_model_table.py
       hash: md5
-      md5: ec4118a6542b235efa0004ebce9a9a3e
-      size: 1746
+      md5: 7d3c18d5b7879f7f9ec003e7ca69c974
+      size: 1745
     outs:
     - path: data/interim/model_source.parquet
       hash: md5
@@ -53,8 +53,8 @@ stages:
       size: 158841
     - path: src/features/build_features.py
       hash: md5
-      md5: f4c175e7365d28b1e242821f4aef4767
-      size: 1745
+      md5: 484831933452691ff9dbd490e842801f
+      size: 1744
     outs:
     - path: data/processed/test.parquet
       hash: md5
@@ -69,7 +69,7 @@ stages:
       md5: 61ec0c7829748e4f585f8a8927c94b90
       size: 77481
   train:
-    cmd: ".venv/bin/python src/models/compare_models.py\n"
+    cmd: uv run python src/models/compare_models.py
     deps:
     - path: data/processed/train.parquet
       hash: md5
@@ -81,14 +81,46 @@ stages:
       size: 77481
     - path: src/models/compare_models.py
       hash: md5
-      md5: 33025f208b5085af5b365399545be1e4
-      size: 6367
+      md5: d318d311e53486f5730f919a2bc03442
+      size: 6366
     outs:
     - path: artifacts/model_selection.json
       hash: md5
-      md5: 08e6f48a871b6b361fd41f6c28660500
+      md5: 7bfca50a7b5fbf3d31e801930abbf66b
       size: 493
     - path: models/selected_house_price_model.joblib
       hash: md5
       md5: 3b807f3998eead20661dd77e0ed27525
       size: 22368
+  evaluate:
+    cmd: uv run python src/models/evaluate.py
+    deps:
+    - path: data/processed/test.parquet
+      hash: md5
+      md5: 3611236bc5d58cb24c1728c2a4d5e7cc
+      size: 77373
+    - path: models/selected_house_price_model.joblib
+      hash: md5
+      md5: 3b807f3998eead20661dd77e0ed27525
+      size: 22368
+    - path: src/models/evaluate.py
+      hash: md5
+      md5: 7eb9fef0ca4933f3fb9206d7a0d40b0a
+      size: 5368
+    outs:
+    - path: reports/actual_vs_predicted.png
+      hash: md5
+      md5: 8e42378d4705cab715b594ccc714c578
+      size: 83719
+    - path: reports/metrics.json
+      hash: md5
+      md5: afb27a3d1d6e279dee547da06e584282
+      size: 165
+    - path: reports/residuals.png
+      hash: md5
+      md5: 290d335b117bd1fb728d98572a2d403f
+      size: 79480
+    - path: reports/test_predictions.csv
+      hash: md5
+      md5: 175bfd90257609c4a938a576b1a5b012
+      size: 14845
