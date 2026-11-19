@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=./eksctl-schema.json
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: house-price-eks
+  region: us-west-1
+
+managedNodeGroups:
+  - name: house-price-nodes
+    instanceType: t3.medium
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 2
+    volumeSize: 20
+    ssh:
+      allow: false
