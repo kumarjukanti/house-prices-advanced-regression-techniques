@@ -1,0 +1,47 @@
+name: House Prices Artifact Integration
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  artifact-tests:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: artifact-integration
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v10.3.0
+        with:
+          enable-cache: true
+
+      - name: Install Python 3.13
+        run: uv python install 3.13
+
+      - name: Install locked dependencies
+        run: uv sync --frozen --dev --no-install-project --python 3.13
+
+      - name: Authenticate to AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DVC_READ_ROLE_ARN }}
+          aws-region: us-west-1
+
+      - name: Download DVC artifacts
+        run: uv run --no-sync dvc pull
+
+      - name: Generate model lineage
+        run: uv run --no-sync python src/models/create_lineage.py
+
+      - name: Run all tests
+        run: uv run --no-sync python -m pytest -q
