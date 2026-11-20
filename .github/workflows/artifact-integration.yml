@@ -31,6 +31,44 @@ jobs:
       - name: Install locked dependencies
         run: uv sync --frozen --dev --no-install-project --python 3.13
 
+      - name: Check GitHub OIDC identity
+        shell: bash
+        run: |
+          python - <<'PY'
+          import base64
+          import json
+          import os
+          import urllib.parse
+          import urllib.request
+
+          url = os.environ["ACTIONS_ID_TOKEN_REQUEST_URL"]
+          separator = "&" if "?" in url else "?"
+          url += separator + urllib.parse.urlencode(
+              {"audience": "sts.amazonaws.com"}
+          )
+
+          request = urllib.request.Request(
+              url,
+              headers={
+                  "Authorization": (
+                      "Bearer "
+                      + os.environ["ACTIONS_ID_TOKEN_REQUEST_TOKEN"]
+                  )
+              },
+          )
+
+          with urllib.request.urlopen(request, timeout=30) as response:
+              token = json.load(response)["value"]
+
+          payload = token.split(".")[1]
+          payload += "=" * (-len(payload) % 4)
+          claims = json.loads(base64.urlsafe_b64decode(payload))
+
+          # Print selected claims only, never the token.
+          for key in ["sub", "aud", "repository", "environment"]:
+              print(f"{key}: {claims.get(key)}")
+          PY
+
       - name: Authenticate to AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
